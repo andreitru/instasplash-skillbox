@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-
 import { selectAllPhotos, fetchPhotos } from './photosSlice'
 
 export const PhotosList = () => {
@@ -10,6 +9,7 @@ export const PhotosList = () => {
 
   const photosStatus = useSelector(state => state.photos.status)
   const error = useSelector(state => state.photos.error)
+
   useEffect(() => {
     if (photosStatus === 'idle') {
       dispatch(fetchPhotos())

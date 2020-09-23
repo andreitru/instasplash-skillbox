@@ -1,7 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-
 import { selectPhotoById } from './photosSlice'
 
 export const SinglePhotoPage = ({ match }) => {
@@ -13,7 +12,7 @@ export const SinglePhotoPage = ({ match }) => {
     return (
       <section>
         <Link to="/">На главную страницу</Link>
-        <h2>Photo not found!</h2>
+        <h2>Фото не найдено!</h2>
       </section>
     )
   }
