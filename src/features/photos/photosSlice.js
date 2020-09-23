@@ -1,15 +1,8 @@
-import {
-  createAsyncThunk,
-  createSlice
-} from '@reduxjs/toolkit'
-
-import Unsplash, {
-  toJson
-} from 'unsplash-js';
-
-const unsplash = new Unsplash({
-  accessKey: "9dmJuJYn-_Gouxot2QZIwJxdjbbnPqBC93hadkv5uvY"
-});
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { toJson } from 'unsplash-js';
+import { unsplash } from '../../api/unsplashApi'
+import fetch from 'node-fetch';
+global.fetch = fetch;
 
 const initialState = {
   photos: [],
