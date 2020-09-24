@@ -11,7 +11,7 @@ const initialState = {
 
 const code = window.location.search.split('code=')[1];
 
-export const fetchToken = createAsyncThunk('token/fetchToken', () => {
+export const fetchToken = createAsyncThunk('token/fetchToken', async () => {
   unsplash.auth.userAuthentication(code)
   .then(res => res.json())
   .then(json => {
