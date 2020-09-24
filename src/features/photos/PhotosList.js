@@ -2,19 +2,20 @@ import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { selectAllPhotos, fetchPhotos } from './photosSlice'
+import Cookies from 'js-cookie'
 
 export const PhotosList = () => {
   const dispatch = useDispatch()
   const photos = useSelector(selectAllPhotos)
-
   const photosStatus = useSelector(state => state.photos.status)
   const error = useSelector(state => state.photos.error)
+  const page = useSelector(state => state.photos.page)
 
   useEffect(() => {
-    if (photosStatus === 'idle') {
-      dispatch(fetchPhotos())
+    if (Cookies.get('token') !== undefined && photosStatus === 'idle') {
+      dispatch(fetchPhotos(page))
     }
-  }, [photosStatus, dispatch])
+  }, [photosStatus, dispatch, page])
 
   let content
 
@@ -26,7 +27,7 @@ export const PhotosList = () => {
       <Link to={`/photos/${photo.id}`}>
         <img src={photo.urls.small} alt={photo.alt_description}  />
       </Link>
-      <p>{photo.likes}</p>
+      <p>{photo.likes} </p>
     </article>
     ))
   } else if (photosStatus === 'failed') {
@@ -37,6 +38,7 @@ export const PhotosList = () => {
     <section>
       <h2>Photos</h2>
       {content}
+      <button onClick={() => dispatch(fetchPhotos(page))}>Загрузить ещё</button>
     </section>
   )
 }
