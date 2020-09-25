@@ -27,7 +27,9 @@ export const PhotosList = () => {
       <Link to={`/photos/${photo.id}`}>
         <img src={photo.urls.small} alt={photo.alt_description}  />
       </Link>
-      <p>{photo.likes} </p>
+      <p>{photo.likes}</p>
+      <a href={photo.user.links.html} target='_blank' rel='noreferrer noopener'><img src={photo.user.profile_image.medium} alt={photo.user.name}/>{photo.user.name}</a>
+      <p>{photo.created_at}</p>
     </article>
     ))
   } else if (photosStatus === 'failed') {

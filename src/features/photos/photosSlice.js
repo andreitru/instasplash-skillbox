@@ -8,11 +8,30 @@ const initialState = {
   photos: [],
   status: 'idle',
   error: null,
-  page: 1
+  page: 1,
+  fetchPhotoStatus: 'idle',
+  fetchPhotoError: null,
+  likeStatus: 'idle',
+  likeError: null
 }
 
 export const fetchPhotos = createAsyncThunk('photos/fetchPhotos', async (page) => {
   const response = await unsplash.photos.listPhotos(page).then(toJson).then(json => json)
+  return response
+})
+
+export const fetchSinglePhoto = createAsyncThunk('photos/getPhoto', async (id) => {
+  const response = await unsplash.photos.getPhoto(id).then(toJson).then(json => json)
+  return response  
+})
+
+export const fetchLikePhoto = createAsyncThunk('photos/likePhoto', async (id) => {
+  const response = await unsplash.photos.likePhoto(id).then(toJson).then(json => json)
+  return response
+})
+
+export const fetchUnlikePhoto = createAsyncThunk('photos/unlikePhoto', async (id) => {
+  const response = await unsplash.photos.unlikePhoto(id).then(toJson).then(json => json)
   return response
 })
 
@@ -21,8 +40,8 @@ export const photosSlice = createSlice({
   initialState,
   reducers: {
     likedPhoto(state, action) {
-      const photoId = action.payload.photoId
-      const existingPhoto = state.photos.find(photo => photo.id === photoId)
+      const id = action.payload.id
+      const existingPhoto = state.photos.find(photo => photo.id === id)
       existingPhoto.likes = action.payload.likes
     }
   },
@@ -38,6 +57,48 @@ export const photosSlice = createSlice({
     [fetchPhotos.rejected]: (state, action) => {
       state.status = 'failed'
       state.error = action.error.message
+    },
+    [fetchSinglePhoto.pending]: (state, action) => {
+      state.fetchPhotoStatus = 'loading'
+    },
+    [fetchSinglePhoto.fulfilled]: (state, action) => {
+      state.fetchPhotoStatus = 'succeeded'
+      const { likes, liked_by_user, id } = action.payload
+      const existingPhoto = state.photos.find(photo => photo.id === id)
+      existingPhoto.likes = likes
+      existingPhoto.liked_by_user = liked_by_user
+    },
+    [fetchSinglePhoto.rejected]: (state, action) => {
+      state.fetchPhotoStatus = 'failed'
+      state.fetchPhotoError = action.error.message
+    },
+    [fetchLikePhoto.pending]: (state, action) => {
+      state.likeStatus = 'loading'
+    },
+    [fetchLikePhoto.fulfilled]: (state, action) => {
+      state.likeStatus = 'succeeded'
+      const { likes, liked_by_user, id } = action.payload.photo
+      const existingPhoto = state.photos.find(photo => photo.id === id)
+      existingPhoto.likes = likes
+      existingPhoto.liked_by_user = liked_by_user
+    },
+    [fetchLikePhoto.rejected]: (state, action) => {
+      state.likeStatus = 'failed'
+      state.likeError = action.error.message
+    },
+    [fetchUnlikePhoto.pending]: (state, action) => {
+      state.likeStatus = 'loading'
+    },
+    [fetchUnlikePhoto.fulfilled]: (state, action) => {
+      state.likeStatus = 'succeeded'
+      const { likes, liked_by_user, id } = action.payload.photo
+      const existingPhoto = state.photos.find(photo => photo.id === id)
+      existingPhoto.likes = likes
+      existingPhoto.liked_by_user = liked_by_user
+    },
+    [fetchUnlikePhoto.rejected]: (state, action) => {
+      state.likeStatus = 'failed'
+      state.likeError = action.error.message
     }
   }
 })
