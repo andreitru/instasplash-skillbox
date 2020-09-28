@@ -1,0 +1,158 @@
+.container {
+  max-width: 1830px;
+  margin: 0 auto;
+  padding-right: 50px;
+  padding-left: 50px;
+  padding-top: 100px;
+}
+
+.photo {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  margin-top: 10px;
+  margin-right: 5px;
+  margin-left: 5px;
+  margin-bottom: 40px;
+  background-color: #fff;
+  border-radius: 10px;
+  border: 1px solid rgba(211, 211, 211, 0.377);
+  transition: all 0.2s ease-in-out;
+}
+
+.photo:hover,
+.photo:focus {
+  border: 1px solid rgb(211, 211, 211);
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  padding-left: 10px;
+}
+
+.profile-link {
+  display: flex;
+  align-items: center;
+  letter-spacing: 1px;
+}
+
+.profile-link:hover,
+.profile-link:focus {
+  text-decoration: underline;
+}
+
+.profile-img {
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+  border-radius: 50%;
+}
+
+.bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.likes {
+  font-family: 'pridimedium';
+  letter-spacing: 1px;
+}
+
+.date {
+  font-family: 'pridilight';
+}
+
+.error {
+  padding-top: 150px;
+  text-align: center;
+  color: red;
+  font-size: 20px;
+}
+
+@media (max-width: 1366px) {
+  .bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .date,
+  .likes {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 992px) {
+  .container {
+    padding-right: 40px;
+    padding-left: 40px;
+    padding-top: 90px;
+  }
+  .profile-link {
+    font-size: 14px;
+  }
+
+  .photo {
+    margin-right: 0;
+    margin-left: 0;
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding-top: 75px;
+  }
+
+  .photo {
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 320px) {
+  .container {
+    padding-right: 30px;
+    padding-left: 30px;
+  }
+  .profile-img {
+    width: 25px;
+    height: 25px;
+  }
+
+  .top {
+    height: 40px;
+  }
+
+  .bottom {
+    height: 30px;
+  }
+  .profile-link,
+  .date,
+  .likes {
+    font-size: 12px;
+  }
+}
+
+@media (orientation: landscape) {
+  .container {
+    padding-top: 0;
+  }
+}
+
+@media (min-width: 1025px) and (orientation: landscape) {
+  .container {
+    padding-top: 100px;
+  }
+}

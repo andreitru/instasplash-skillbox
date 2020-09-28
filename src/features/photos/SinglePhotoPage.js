@@ -8,7 +8,8 @@ export const SinglePhotoPage = ({ match }) => {
   const { photoId } = match.params
 
   const photo = useSelector(state => selectPhotoById(state, photoId))
-  const status = useSelector(state => state.photos.likeStatus)
+  const likeStatus = useSelector(state => state.photos.likeStatus)
+  const singlePhotoStatus = useSelector(state => state.photos.fetchPhotoStatus)
   const error = useSelector(state => state.photos.likeError)
   const likes = photo.likes
   const id = photo.id
@@ -24,21 +25,22 @@ export const SinglePhotoPage = ({ match }) => {
 
   let isLiked;
   let likeCounter;
-  if (status === 'loading') {
+  if (likeStatus === 'loading') {
     isLiked = <p>Loading...</p>
     likeCounter = <p>Loading...</p>
-  } else if (status === 'succeeded') {
+  } else if (likeStatus === 'succeeded' || singlePhotoStatus === 'succeeded') {
     isLiked = <p>{photo.liked_by_user ? 'liked' : 'not liked'}</p>
     likeCounter = <p>{likes}</p>
     dispatch(likedPhoto({id, likes}))
-  } else if (status === 'failed') {
+  } else if (likeStatus === 'failed') {
     isLiked = <p>{error}</p>
     likeCounter = <p>{error}</p>
   }
 
   return (
     <section>
-       <Link to="/">Назад</Link>
+       {/* <Link to="/">Назад</Link> */}
+       <button onClick={() => window.history.back()}>Назад</button>
       <article>
         <img src={photo.urls.regular} alt={photo.alt_description} 
           onLoad={() => dispatch(fetchSinglePhoto(id))
@@ -54,6 +56,7 @@ export const SinglePhotoPage = ({ match }) => {
         </button>
         {isLiked}
       </article>
+     
     </section>
   )
 }

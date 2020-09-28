@@ -1,0 +1,61 @@
+.header {
+  margin: 0 auto;
+  position: fixed;
+  width: 100%;
+  height: auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid lightgray;
+  background-color: #fff;
+}
+
+.logo {
+  margin: 0 auto;
+  width: 500px;
+  padding-left: 60px; 
+  padding-top: 12px;
+  text-align: center;
+  font-family: 'pridimedium', sans-serif;
+  font-size: 52px;
+  letter-spacing: 5px;
+  color: #363636;
+  background: url('../img/digital-camera.svg') no-repeat left top;
+}
+
+@media (max-width: 1024px) {
+  .logo {
+    width: 400px;
+    font-size: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .logo {
+    width: 300px;
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    position: relative;
+  }
+
+  .logo {
+    width: 230px;
+    padding-left: 40px;
+    font-size: 20px;
+  }
+}
+
+@media (orientation: landscape) {
+  .header {
+    position: relative;
+  }
+}
+
+@media (min-width: 1025px) and (orientation: landscape) {
+  .header {
+    position: fixed;
+  }
+}
