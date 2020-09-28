@@ -1,0 +1,52 @@
+@font-face {
+  font-family: 'pridimedium';
+    src: url('../fonts/pridi-medium.woff2') format('woff2'),
+         url('../fonts/pridi-medium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+  font-family: 'pridisemibold';
+  src: url('../fonts/pridi-semibold.woff2') format('woff2'),
+       url('../fonts/pridi-semibold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+@font-face {
+  font-family: 'pridiregular';
+  src: url('../fonts/pridi-regular.woff2') format('woff2'),
+       url('../fonts/pridi-regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+@font-face {
+  font-family: 'pridilight';
+  src: url('../fonts/pridi-light.woff2') format('woff2'),
+       url('../fonts/pridi-light.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+@font-face {
+  font-family: 'pridiextralight';
+  src: url('../fonts/pridi-extralight.woff2') format('woff2'),
+       url('../fonts/pridi-extralight.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+@font-face {
+  font-family: 'pridibold';
+  src: url('../fonts/pridi-bold.woff2') format('woff2'),
+       url('../fonts/pridi-bold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+
+}
