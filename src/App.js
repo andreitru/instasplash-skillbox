@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import { PhotosList } from './features/photos/PhotosList'
 import { SinglePhotoPage } from './features/photos/SinglePhotoPage'
 import { Auth } from './api/Auth.js'
-import { Header } from './features/photos/Header'
 
 import './features/photos/styles/font-faces.css'
 import './features/photos/styles/normalize.css'
@@ -23,7 +22,6 @@ function App() {
           path="/"
           render={() => (
             <React.Fragment>
-              <Header />
               <PhotosList />
             </React.Fragment>
           )}

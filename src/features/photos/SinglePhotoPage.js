@@ -2,61 +2,99 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { selectPhotoById, fetchLikePhoto, fetchUnlikePhoto, fetchSinglePhoto, likedPhoto } from './photosSlice'
+import { formatRelative, subDays } from 'date-fns'
 
 export const SinglePhotoPage = ({ match }) => {
   const dispatch = useDispatch()
   const { photoId } = match.params
 
   const photo = useSelector(state => selectPhotoById(state, photoId))
-  const likeStatus = useSelector(state => state.photos.likeStatus)
-  const singlePhotoStatus = useSelector(state => state.photos.fetchPhotoStatus)
-  const error = useSelector(state => state.photos.likeError)
-  const likes = photo.likes
-  const id = photo.id
-
+  const {likeStatus, likeError, fetchPhotoStatus, fetchPhotoError } = useSelector(state => state.photos)
+  
   if (!photo) {
     return (
       <section>
-        <Link to="/">На главную страницу</Link>
-        <h2>Фото не найдено!</h2>
+        <div className="error">
+          <h2 className="error-title">Photo not found!</h2>
+          <Link to="/" className="error-link">Go to main page</Link>
+        </div>
       </section>
     )
   }
 
-  let isLiked;
+  const likes = photo.likes
+  const id = photo.id
+  let likeBtn;
   let likeCounter;
-  if (likeStatus === 'loading') {
-    isLiked = <p>Loading...</p>
-    likeCounter = <p>Loading...</p>
-  } else if (likeStatus === 'succeeded' || singlePhotoStatus === 'succeeded') {
-    isLiked = <p>{photo.liked_by_user ? 'liked' : 'not liked'}</p>
-    likeCounter = <p>{likes}</p>
+   if (likeStatus === 'succeeded' || fetchPhotoStatus === 'succeeded') {
+    likeBtn = photo.liked_by_user ? `like-btn liked` : `like-btn unliked`
+    likeCounter = <span>{likes}</span>
     dispatch(likedPhoto({id, likes}))
-  } else if (likeStatus === 'failed') {
-    isLiked = <p>{error}</p>
-    likeCounter = <p>{error}</p>
   }
 
   return (
     <section>
-       {/* <Link to="/">Назад</Link> */}
-       <button onClick={() => window.history.back()}>Назад</button>
-      <article>
-        <img src={photo.urls.regular} alt={photo.alt_description} 
-          onLoad={() => dispatch(fetchSinglePhoto(id))
-        }/>
-        <a href={photo.user.links.html} target='_blank' rel='noreferrer noopener'><img src={photo.user.profile_image.medium} alt={photo.user.name}/>{photo.user.name}</a>
-        <p>{photo.created_at}</p>
-        {likeCounter}
-        <button onClick={() => dispatch(fetchLikePhoto(id))}>
-          Like
+      <div 
+        className="error"
+        style={(fetchPhotoStatus === 'failed' || likeStatus === 'failed') ? {display: "block"} : {display: "none"}} 
+        >Error: {fetchPhotoError} {likeError}
+        <button 
+          className="back-btn"
+          onClick={() => window.history.back()} 
+          >
         </button>
-        <button onClick={() => dispatch(fetchUnlikePhoto(id))}>
-          Unlike
+      </div>
+      <div 
+        className="single-photo-container"
+        style={(fetchPhotoStatus === 'failed' || likeStatus === 'failed') ? {display: "none"} : {display: "block"}} 
+        >
+        <button 
+          className="back-btn"
+          onClick={() => window.history.back()} 
+          >
         </button>
-        {isLiked}
+
+      <article className="photo-container">
+        <figure className="figure">
+          <img 
+            className="single-photo" 
+            src={photo.urls.regular} 
+            alt={photo.alt_description} 
+            onLoad={() => dispatch(fetchSinglePhoto(id))}
+          />
+          <figcaption className="figcaption">
+            {photo.alt_description}
+          </figcaption>
+        </figure>
+        <div className="single-bottom">
+          <div className="bottom-left">
+          <a 
+            className="profile-link single-profile-link" 
+            href={photo.user.links.html} target='_blank' 
+            rel='noreferrer noopener'>
+            <img 
+              className="profile-img single-profile-img" 
+              src={photo.user.profile_image.large} 
+              alt={photo.user.name}
+            />
+            {photo.user.name}
+          </a>
+          </div>
+          <div className="bottom-right">
+            <button 
+              className={likeBtn} 
+              onClick={() => {photo.liked_by_user ? dispatch(fetchUnlikePhoto(id)) : dispatch(fetchLikePhoto(id))}}>
+            </button>
+            <p className="likes single-likes">
+              {likeCounter}
+            </p>
+            <p className="date">
+              {formatRelative(subDays(new Date(photo.created_at), 0), new Date())}
+            </p>
+          </div>
+        </div>
       </article>
-     
+      </div>
     </section>
   )
 }
