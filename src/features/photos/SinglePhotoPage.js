@@ -1,7 +1,8 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { selectPhotoById, fetchLikePhoto, fetchUnlikePhoto, fetchSinglePhoto, likedPhoto } from './photosSlice'
+import { utmSource } from '../../api/unsplashApi'
+import { selectPhotoById, fetchLikePhoto, fetchUnlikePhoto, fetchSinglePhoto, likedPhoto, getFullSize } from './photosSlice'
 import { formatRelative, subDays } from 'date-fns'
 
 export const SinglePhotoPage = ({ match }) => {
@@ -9,7 +10,7 @@ export const SinglePhotoPage = ({ match }) => {
   const { photoId } = match.params
 
   const photo = useSelector(state => selectPhotoById(state, photoId))
-  const {likeStatus, likeError, fetchPhotoStatus, fetchPhotoError } = useSelector(state => state.photos)
+  const {likeStatus, likeError, fetchPhotoStatus, fetchPhotoError, isFullSize } = useSelector(state => state.photos)
   
   if (!photo) {
     return (
@@ -36,7 +37,7 @@ export const SinglePhotoPage = ({ match }) => {
     <section>
       <div 
         className="error"
-        style={(fetchPhotoStatus === 'failed' || likeStatus === 'failed') ? {display: "block"} : {display: "none"}} 
+        style={(fetchPhotoStatus === 'failed' || likeStatus === 'failed') ? {display: "flex"} : {display: "none"}} 
         >Error: {fetchPhotoError} {likeError}
         <button 
           className="back-btn"
@@ -54,14 +55,20 @@ export const SinglePhotoPage = ({ match }) => {
           >
         </button>
 
-      <article className="photo-container">
+      <article className={isFullSize ? "photo-container-full-size" : "photo-container"}>
         <figure className="figure">
-          <img 
-            className="single-photo" 
+          <div 
+            className={isFullSize ? "img-wrapper-full-size" : "img-wrapper"}
+          >
+            <img 
+            className={isFullSize ? "full-size" : "single-photo"} 
             src={photo.urls.regular} 
             alt={photo.alt_description} 
             onLoad={() => dispatch(fetchSinglePhoto(id))}
+            onClick={() => dispatch(getFullSize())}
           />
+          </div>
+          
           <figcaption className="figcaption">
             {photo.alt_description}
           </figcaption>
@@ -70,7 +77,7 @@ export const SinglePhotoPage = ({ match }) => {
           <div className="bottom-left">
           <a 
             className="profile-link single-profile-link" 
-            href={photo.user.links.html} target='_blank' 
+            href={photo.user.links.html+utmSource} target='_blank' 
             rel='noreferrer noopener'>
             <img 
               className="profile-img single-profile-img" 

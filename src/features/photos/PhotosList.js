@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { selectAllPhotos, fetchPhotos } from './photosSlice'
+import { utmSource } from '../../api/unsplashApi'
 import Cookies from 'js-cookie'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import Masonry from 'react-masonry-css'
@@ -26,11 +27,10 @@ export const PhotosList = () => {
   }
 
   return (
-    
     <section>
       <div 
         className="error"
-        style={(status === 'failed') ? {display: "block"} : {display: "none"}}>
+        style={(status === 'failed') ? {display: "flex"} : {display: "none"}}>
         Error: {error}
       </div>
       <div 
@@ -40,6 +40,7 @@ export const PhotosList = () => {
           dataLength={photos.length}  
           next={() => dispatch(fetchPhotos(page))}
           hasMore={true}
+          scrollThreshold='80%'
           loader={<div className="lds-ripple"><div></div><div></div></div>}
         >
           <Masonry
@@ -53,7 +54,7 @@ export const PhotosList = () => {
                 <div className="top">
                   <a 
                     className="profile-link" 
-                    href={photo.user.links.html} 
+                    href={photo.user.links.html+utmSource} 
                     target='_blank' 
                     rel='noreferrer noopener'>
                     <img 

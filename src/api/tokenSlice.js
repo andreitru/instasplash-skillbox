@@ -16,7 +16,7 @@ export const fetchToken = createAsyncThunk('token/fetchToken', async () => {
   .then(res => res.json())
   .then(json => {
     unsplash.auth.setBearerToken(json.access_token);
-    Cookies.set('token', json.access_token)})
+    Cookies.set('token', json.access_token, { expires: 365 })})
 })
 
 export const tokenSlice = createSlice({
