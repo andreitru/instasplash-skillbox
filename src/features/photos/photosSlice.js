@@ -6,6 +6,7 @@ global.fetch = fetch;
 
 const initialState = {
   photos: [],
+  isFullSize: false,
   status: 'idle',
   error: null,
   page: 1,
@@ -43,6 +44,9 @@ export const photosSlice = createSlice({
       const id = action.payload.id
       const existingPhoto = state.photos.find(photo => photo.id === id)
       existingPhoto.likes = action.payload.likes
+    },
+    getFullSize(state, action) {
+      state.isFullSize = !state.isFullSize;
     }
   },
   extraReducers: {
@@ -103,7 +107,7 @@ export const photosSlice = createSlice({
   }
 })
 
-export const { likedPhoto } = photosSlice.actions
+export const { likedPhoto, getFullSize } = photosSlice.actions
 
 export default photosSlice.reducer
 
