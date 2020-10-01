@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { utmSource } from '../../api/unsplashApi'
-import { selectPhotoById, fetchLikePhoto, fetchUnlikePhoto, fetchSinglePhoto, likedPhoto, getFullSize } from './photosSlice'
+import { selectPhotoById, fetchLikePhoto, fetchUnlikePhoto, fetchSinglePhoto, getPhotoLikes, getFullSize } from './photosSlice'
 import { formatRelative, subDays } from 'date-fns'
 
 export const SinglePhotoPage = ({ match }) => {
@@ -27,10 +27,13 @@ export const SinglePhotoPage = ({ match }) => {
   const id = photo.id
   let likeBtn;
   let likeCounter;
-   if (likeStatus === 'succeeded' || fetchPhotoStatus === 'succeeded') {
+  if (likeStatus === 'loading' || fetchPhotoStatus === 'loading') {
+    likeBtn = "like-btn-loader"
+    likeCounter = <span>Loading...</span>
+  } else if (likeStatus === 'succeeded' || fetchPhotoStatus === 'succeeded') {
     likeBtn = photo.liked_by_user ? `like-btn liked` : `like-btn unliked`
     likeCounter = <span>{likes}</span>
-    dispatch(likedPhoto({id, likes}))
+    dispatch(getPhotoLikes({id, likes}))
   }
 
   return (
@@ -55,13 +58,13 @@ export const SinglePhotoPage = ({ match }) => {
           >
         </button>
 
-      <article className={isFullSize ? "photo-container-full-size" : "photo-container"}>
+      <article className="photo-container">
         <figure className="figure">
           <div 
             className={isFullSize ? "img-wrapper-full-size" : "img-wrapper"}
           >
             <img 
-            className={isFullSize ? "full-size" : "single-photo"} 
+            className={isFullSize ? "img-full-size" : "single-photo"} 
             src={photo.urls.regular} 
             alt={photo.alt_description} 
             onLoad={() => dispatch(fetchSinglePhoto(id))}
@@ -76,11 +79,11 @@ export const SinglePhotoPage = ({ match }) => {
         <div className="single-bottom">
           <div className="bottom-left">
           <a 
-            className="profile-link single-profile-link" 
+            className="single-profile-link" 
             href={photo.user.links.html+utmSource} target='_blank' 
             rel='noreferrer noopener'>
             <img 
-              className="profile-img single-profile-img" 
+              className="single-profile-img" 
               src={photo.user.profile_image.large} 
               alt={photo.user.name}
             />
@@ -92,7 +95,7 @@ export const SinglePhotoPage = ({ match }) => {
               className={likeBtn} 
               onClick={() => {photo.liked_by_user ? dispatch(fetchUnlikePhoto(id)) : dispatch(fetchLikePhoto(id))}}>
             </button>
-            <p className="likes single-likes">
+            <p className="single-likes">
               {likeCounter}
             </p>
             <p className="date">

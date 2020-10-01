@@ -40,7 +40,7 @@ export const photosSlice = createSlice({
   name: 'photos',
   initialState,
   reducers: {
-    likedPhoto(state, action) {
+    getPhotoLikes(state, action) {
       const id = action.payload.id
       const existingPhoto = state.photos.find(photo => photo.id === id)
       existingPhoto.likes = action.payload.likes
@@ -107,7 +107,7 @@ export const photosSlice = createSlice({
   }
 })
 
-export const { likedPhoto, getFullSize } = photosSlice.actions
+export const { getPhotoLikes, getFullSize } = photosSlice.actions
 
 export default photosSlice.reducer
 
