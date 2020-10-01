@@ -4,7 +4,7 @@ import Cookies from 'js-cookie'
 import fetch from 'node-fetch';
 global.fetch = fetch;
 
-export const utmSource = "?utm_source=instasplash&utm_medium=referral"
+export const utmSource = '?utm_source=instasplash&utm_medium=referral'
 
 export const unsplash = new Unsplash({
   accessKey: ACCESS_KEY,
@@ -21,5 +21,3 @@ const authenticationUrl = unsplash.auth.getAuthenticationUrl([
 if (Cookies.get('token') === undefined) {
   window.location.assign(authenticationUrl);
 }
-
-// Cookies.remove('token')

@@ -1,6 +1,5 @@
 import React from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
-
 import { PhotosList } from './features/photos/PhotosList'
 import { SinglePhotoPage } from './features/photos/SinglePhotoPage'
 import { Auth } from './api/Auth.js'
