@@ -64,6 +64,9 @@ export const photosSlice = createSlice({
     },
     [fetchSinglePhoto.pending]: (state, action) => {
       state.fetchPhotoStatus = 'loading'
+      if (state.isFullSize === true) {
+        state.isFullSize = !state.isFullSize;
+      }
     },
     [fetchSinglePhoto.fulfilled]: (state, action) => {
       state.fetchPhotoStatus = 'succeeded'
