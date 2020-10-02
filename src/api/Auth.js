@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchToken } from '../api/tokenSlice'
-import Cookies from 'js-cookie'
 
 export const Auth = () => {
   const dispatch = useDispatch()
@@ -16,7 +15,7 @@ export const Auth = () => {
   
   let content;
 
-  if (tokenStatus === 'succeeded' && Cookies.get('token') !== undefined) {
+  if (tokenStatus === 'succeeded') {
     content = <Redirect to="/" />
   } else if (tokenStatus === 'failed') {
     content = <div>{tokenError}</div>

@@ -1,6 +1,8 @@
 import Unsplash from 'unsplash-js';
 import { ACCESS_KEY, SECRET, CALLBACK_URL } from './keys'
 import Cookies from 'js-cookie'
+import fetch from 'node-fetch';
+global.fetch = fetch;
 
 export const utmSource = '?utm_source=instasplash&utm_medium=referral'
 
