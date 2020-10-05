@@ -41,7 +41,7 @@ export const photosSlice = createSlice({
   initialState,
   reducers: {
     getPhotoLikes(state, action) {
-      const id = action.payload.id
+      const { id } = action.payload
       const existingPhoto = state.photos.find(photo => photo.id === id)
       existingPhoto.likes = action.payload.likes
     },
@@ -64,6 +64,9 @@ export const photosSlice = createSlice({
     },
     [fetchSinglePhoto.pending]: (state, action) => {
       state.fetchPhotoStatus = 'loading'
+      if (state.isFullSize === true) {
+        state.isFullSize = !state.isFullSize;
+      }
     },
     [fetchSinglePhoto.fulfilled]: (state, action) => {
       state.fetchPhotoStatus = 'succeeded'

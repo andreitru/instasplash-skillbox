@@ -51,8 +51,8 @@ export const PhotosList = () => {
       
             {photos.map(photo => (
               <article className="photo" key={photo.id}>
-                <div className="top">
-                  <a 
+                <div className="top">         
+                    <a 
                     className="profile-link" 
                     href={photo.user.links.html+utmSource} 
                     target='_blank' 
@@ -63,7 +63,7 @@ export const PhotosList = () => {
                       alt={photo.user.name}
                     />
                     {photo.user.name}
-                  </a>
+                  </a>      
                 </div>
                 <Link to={`/photos/${photo.id}`}>
                   <img 

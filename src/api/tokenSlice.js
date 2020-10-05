@@ -9,14 +9,9 @@ const initialState = {
   tokenError: null
 }
 
-const code = window.location.search.split('code=')[1];
-
-export const fetchToken = createAsyncThunk('token/fetchToken', async () => {
-  unsplash.auth.userAuthentication(code)
-  .then(res => res.json())
-  .then(json => {
-    unsplash.auth.setBearerToken(json.access_token);
-    Cookies.set('token', json.access_token, { expires: 365 })})
+export const fetchToken = createAsyncThunk('token/fetchToken', async (code) => {
+  const response = await unsplash.auth.userAuthentication(code).then(res => res.json()).then(json => json)
+  return response
 })
 
 export const tokenSlice = createSlice({
@@ -26,6 +21,9 @@ export const tokenSlice = createSlice({
   extraReducers: {
     [fetchToken.fulfilled]: (state, action) => {
       state.tokenStatus = 'succeeded'
+      const { access_token } = action.payload
+      unsplash.auth.setBearerToken(access_token)
+      Cookies.set('token', access_token, { expires: 365 })
     },
     [fetchToken.rejected]: (state, action) => {
       state.tokenStatus = 'failed'

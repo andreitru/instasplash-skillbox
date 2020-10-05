@@ -10,7 +10,7 @@ export const SinglePhotoPage = ({ match }) => {
   const { photoId } = match.params
 
   const photo = useSelector(state => selectPhotoById(state, photoId))
-  const {likeStatus, likeError, fetchPhotoStatus, fetchPhotoError, isFullSize } = useSelector(state => state.photos)
+  const { likeStatus, likeError, fetchPhotoStatus, fetchPhotoError, isFullSize } = useSelector(state => state.photos)
   
   if (!photo) {
     return (
@@ -25,13 +25,13 @@ export const SinglePhotoPage = ({ match }) => {
 
   const likes = photo.likes
   const id = photo.id
-  let likeBtn;
+  let likeBtnClass;
   let likeCounter;
   if (likeStatus === 'loading' || fetchPhotoStatus === 'loading') {
-    likeBtn = "like-btn-loader"
+    likeBtnClass = "like-btn-loader"
     likeCounter = <span>Loading...</span>
   } else if (likeStatus === 'succeeded' || fetchPhotoStatus === 'succeeded') {
-    likeBtn = photo.liked_by_user ? `like-btn liked` : `like-btn unliked`
+    likeBtnClass = photo.liked_by_user ? `like-btn liked` : `like-btn unliked`
     likeCounter = <span>{likes}</span>
     dispatch(getPhotoLikes({id, likes}))
   }
@@ -64,11 +64,11 @@ export const SinglePhotoPage = ({ match }) => {
             className={isFullSize ? "img-wrapper-full-size" : "img-wrapper"}
           >
             <img 
-            className={isFullSize ? "img-full-size" : "single-photo"} 
-            src={photo.urls.regular} 
-            alt={photo.alt_description} 
-            onLoad={() => dispatch(fetchSinglePhoto(id))}
-            onClick={() => dispatch(getFullSize())}
+              className={isFullSize ? "img-full-size" : "single-photo"} 
+              src={photo.urls.regular} 
+              alt={photo.alt_description} 
+              onLoad={() => dispatch(fetchSinglePhoto(id))}
+              onClick={() => dispatch(getFullSize())}
           />
           </div>
           
@@ -78,21 +78,21 @@ export const SinglePhotoPage = ({ match }) => {
         </figure>
         <div className="single-bottom">
           <div className="bottom-left">
-          <a 
-            className="single-profile-link" 
-            href={photo.user.links.html+utmSource} target='_blank' 
-            rel='noreferrer noopener'>
-            <img 
-              className="single-profile-img" 
-              src={photo.user.profile_image.large} 
-              alt={photo.user.name}
-            />
-            {photo.user.name}
-          </a>
+            <a 
+              className="single-profile-link" 
+              href={photo.user.links.html+utmSource} target='_blank' 
+              rel='noreferrer noopener'>
+              <img 
+                className="single-profile-img" 
+                src={photo.user.profile_image.large} 
+                alt={photo.user.name}
+              />
+              {photo.user.name}
+            </a>
           </div>
           <div className="bottom-right">
             <button 
-              className={likeBtn} 
+              className={likeBtnClass} 
               onClick={() => {photo.liked_by_user ? dispatch(fetchUnlikePhoto(id)) : dispatch(fetchLikePhoto(id))}}>
             </button>
             <p className="single-likes">
