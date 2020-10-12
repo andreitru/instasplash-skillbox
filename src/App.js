@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import { PhotosList } from './features/photos/PhotosList'
 import { SinglePhotoPage } from './features/photos/SinglePhotoPage'
 import { Auth } from './api/Auth.js'
+import store from './app/store'
 
 import './features/photos/styles/font-faces.css'
 import './features/photos/styles/normalize.css'
@@ -32,5 +33,7 @@ function App() {
     </Router>
   )
 }
-
+store.subscribe(() => {
+  sessionStorage.setItem('store', JSON.stringify(store.getState()))
+})
 export default App

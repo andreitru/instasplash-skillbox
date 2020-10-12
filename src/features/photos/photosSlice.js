@@ -1,15 +1,16 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { toJson } from 'unsplash-js';
 import { unsplash } from '../../api/unsplashApi'
+import { persistedPhotos, persistedPage } from '../../app/sessionStorage';
 import fetch from 'node-fetch';
 global.fetch = fetch;
 
 const initialState = {
-  photos: [],
+  photos: persistedPhotos,
   isFullSize: false,
   status: 'idle',
   error: null,
-  page: 1,
+  page: persistedPage,
   fetchPhotoStatus: 'idle',
   fetchPhotoError: null,
   likeStatus: 'idle',
