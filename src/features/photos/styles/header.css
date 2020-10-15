@@ -13,6 +13,7 @@
 .logo {
   margin: 0 auto;
   width: 500px;
+  height: auto;
   padding-left: 60px; 
   padding-top: 12px;
   text-align: center;
@@ -23,10 +24,39 @@
   background: url('../img/digital-camera.svg') no-repeat left top;
 }
 
+.login-block {
+  position: absolute;
+  top: 0;
+  right: 20px;
+  display: flex;
+  height: 91px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-button {
+  padding: 5px;
+  cursor: pointer;
+  background-color: #fff;
+  border: none;
+  outline: none;
+  font-size: 20px;
+}
+
+.login-button:hover,
+.login-button:focus {
+  border-bottom: 1px solid black;
+}
+
 @media (max-width: 1024px) {
   .logo {
     width: 400px;
     font-size: 40px;
+  }
+
+  .login-block {
+    height: 78px;
   }
 }
 
@@ -34,6 +64,19 @@
   .logo {
     width: 300px;
     font-size: 30px;
+  }
+
+  .login-block {
+    height: 66px;
+    right: 5px;
+  }
+
+  .login-button {
+    font-size: 16px;
+  }
+
+  .login-text {
+    font-size: 12px;
   }
 }
 
@@ -46,6 +89,19 @@
     width: 230px;
     padding-left: 40px;
     font-size: 20px;
+  }
+
+  .login-block {
+    justify-content: start;
+    height: 55px;
+  }
+
+  .login-button {
+    font-size: 12px;
+  }
+
+  .login-text {
+    display: none;
   }
 }
 

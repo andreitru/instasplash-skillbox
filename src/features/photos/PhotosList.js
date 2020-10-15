@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { selectAllPhotos, fetchPhotos } from './photosSlice'
 import { utmSource } from '../../api/unsplashApi'
-import Cookies from 'js-cookie'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import Masonry from 'react-masonry-css'
 import { formatRelative, subDays } from 'date-fns'
@@ -14,7 +13,7 @@ export const PhotosList = () => {
   const { status, error, page } = useSelector(state => state.photos)
 
   useEffect(() => {
-    if (Cookies.get('token') !== undefined && status === 'idle') {
+    if (status === 'idle') {
       dispatch(fetchPhotos(page))
     }
   }, [status, dispatch, page])

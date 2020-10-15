@@ -13,11 +13,7 @@ export const unsplash = new Unsplash({
   bearerToken: Cookies.get('token')
 });
 
-const authenticationUrl = unsplash.auth.getAuthenticationUrl([
+export const authenticationUrl = unsplash.auth.getAuthenticationUrl([
   "public",
   "write_likes"
 ]);
-  
-if (Cookies.get('token') === undefined) {
-  window.location.assign(authenticationUrl);
-}

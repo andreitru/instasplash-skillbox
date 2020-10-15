@@ -1,12 +1,16 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import Cookies from 'js-cookie'
 import { unsplash } from './unsplashApi'
+import { authenticationUrl } from './unsplashApi'
+import { isLoggedIn, currentPage } from '../app/sessionStorage'
 import fetch from 'node-fetch'
 global.fetch = fetch;
 
 const initialState = {
   tokenStatus: 'idle',
-  tokenError: null
+  tokenError: null,
+  isLoggedIn,
+  currentPage
 }
 
 export const fetchToken = createAsyncThunk('token/fetchToken', async (code) => {
@@ -17,10 +21,24 @@ export const fetchToken = createAsyncThunk('token/fetchToken', async (code) => {
 export const tokenSlice = createSlice({
   name: 'token',
   initialState,
-  reducers: {},
+  reducers: {
+    logOut(state, action) {
+      Cookies.remove('token')
+      unsplash.auth.setBearerToken(null)
+      window.location.reload()
+    },
+    logIn(state, action) {
+      state.currentPage = window.location.href.split('ru')[1]
+      window.location.assign(authenticationUrl)
+    }
+  },
   extraReducers: {
+    [fetchToken.pending]: (state, action) => {
+      state.tokenStatus = 'loading'
+    },
     [fetchToken.fulfilled]: (state, action) => {
       state.tokenStatus = 'succeeded'
+      state.isLoggedIn = true
       const { access_token } = action.payload
       unsplash.auth.setBearerToken(access_token)
       Cookies.set('token', access_token, { expires: 365 })
@@ -31,5 +49,7 @@ export const tokenSlice = createSlice({
     }
   }
 })
+
+export const { logOut, logIn } = tokenSlice.actions
 
 export default tokenSlice.reducer

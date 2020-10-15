@@ -6,7 +6,7 @@ import Cookies from 'js-cookie'
 
 export const Auth = () => {
   const dispatch = useDispatch()
-  const { tokenStatus, tokenError } = useSelector(state => state.token)
+  const { tokenStatus, tokenError, currentPage } = useSelector(state => state.token)
   const code = window.location.search.split('code=')[1];
 
   useEffect(() => {
@@ -17,8 +17,10 @@ export const Auth = () => {
   
   let content;
 
-  if (tokenStatus === 'succeeded' && Cookies.get('token') !== undefined) {
-    content = <Redirect to="/" />
+  if (tokenStatus === 'loading') {
+    content = <div>Loading...</div>
+  } else if (tokenStatus === 'succeeded' && Cookies.get('token') !== undefined) {
+    content = <Redirect to={currentPage} />
   } else if (tokenStatus === 'failed') {
     content = <div>{tokenError}</div>
   }

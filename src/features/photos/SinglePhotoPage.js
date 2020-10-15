@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { utmSource } from '../../api/unsplashApi'
 import { selectPhotoById, fetchLikePhoto, fetchUnlikePhoto, fetchSinglePhoto, getPhotoLikes, getFullSize } from './photosSlice'
 import { formatRelative, subDays } from 'date-fns'
+import { logIn } from '../../api/tokenSlice'
 
 export const SinglePhotoPage = ({ match }) => {
   const dispatch = useDispatch()
@@ -11,7 +12,8 @@ export const SinglePhotoPage = ({ match }) => {
 
   const photo = useSelector(state => selectPhotoById(state, photoId))
   const { likeStatus, likeError, fetchPhotoStatus, fetchPhotoError, isFullSize } = useSelector(state => state.photos)
-  
+  const { tokenStatus } = useSelector(state => state.token)
+
   if (!photo) {
     return (
       <section>
@@ -27,6 +29,7 @@ export const SinglePhotoPage = ({ match }) => {
   const id = photo.id
   let likeBtnClass;
   let likeCounter;
+
   if (likeStatus === 'loading' || fetchPhotoStatus === 'loading') {
     likeBtnClass = "like-btn-loader"
     likeCounter = <span>Loading...</span>
@@ -34,13 +37,17 @@ export const SinglePhotoPage = ({ match }) => {
     likeBtnClass = photo.liked_by_user ? `like-btn liked` : `like-btn unliked`
     likeCounter = <span>{likes}</span>
     dispatch(getPhotoLikes({id, likes}))
+  } 
+  
+  if (likeError === 'Requires a bearerToken to be set.') {
+    document.querySelector('#modal-window').classList.add('modal-active') 
   }
-
+  
   return (
     <section>
       <div 
         className="error"
-        style={(fetchPhotoStatus === 'failed' || likeStatus === 'failed') ? {display: "flex"} : {display: "none"}} 
+        style={(fetchPhotoStatus === 'failed' || (likeStatus === 'failed' && likeError !== 'Requires a bearerToken to be set.')) ? {display: "flex"} : {display: "none"}} 
         >Error: {fetchPhotoError} {likeError}
         <button 
           className="back-btn"
@@ -50,11 +57,11 @@ export const SinglePhotoPage = ({ match }) => {
       </div>
       <div 
         className="single-photo-container"
-        style={(fetchPhotoStatus === 'failed' || likeStatus === 'failed') ? {display: "none"} : {display: "block"}} 
+        style={(fetchPhotoStatus === 'failed' || (likeStatus === 'failed' && likeError !== 'Requires a bearerToken to be set.')) ? {display: "none"} : {display: "block"}} 
         >
         <button 
           className="back-btn"
-          onClick={() => window.history.back()} 
+          onClick={() => tokenStatus === 'succeeded' ? window.location.replace('/') : window.history.back()} 
           >
         </button>
 
@@ -101,6 +108,29 @@ export const SinglePhotoPage = ({ match }) => {
             <p className="date">
               {formatRelative(subDays(new Date(photo.created_at), 0), new Date())}
             </p>
+          </div>
+        </div>
+        <div
+          className="modal-window"
+          id="modal-window"
+        >
+          <p 
+            className="modal-text"
+          >
+            You need to <button 
+                          className="modal-button" 
+                          onClick={() => dispatch(logIn())}
+                        >
+                          Log in
+                        </button>
+          </p>
+          <div
+            className="modal-close"
+            onClick={() => {
+              document.querySelector('#modal-window').classList.remove('modal-active')
+            }}
+          >
+            &times;
           </div>
         </div>
       </article>
