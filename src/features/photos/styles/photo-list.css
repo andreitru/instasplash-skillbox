@@ -78,6 +78,13 @@
   font-size: 20px;
 }
 
+.no-loggedin-text {
+  padding-top: 120px;
+  text-align: center;
+  font-size: 22px;
+  overflow: hidden;
+}
+
 @media (max-width: 1366px) {
   .bottom {
     flex-direction: column;

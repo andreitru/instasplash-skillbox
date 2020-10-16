@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { selectAllPhotos, fetchPhotos } from './photosSlice'
 import { utmSource } from '../../api/unsplashApi'
+import { logIn } from '../../api/tokenSlice'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import Masonry from 'react-masonry-css'
 import { formatRelative, subDays } from 'date-fns'
@@ -11,12 +12,13 @@ export const PhotosList = () => {
   const dispatch = useDispatch()
   const photos = useSelector(selectAllPhotos)
   const { status, error, page } = useSelector(state => state.photos)
+  const { isLoggedIn } = useSelector(state => state.token)
 
   useEffect(() => {
-    if (status === 'idle') {
+    if (status === 'idle' && isLoggedIn) {
       dispatch(fetchPhotos(page))
     }
-  }, [status, dispatch, page])
+  }, [status, dispatch, page, isLoggedIn])
 
   const breakpointColumnsObj = {
     default: 4,
@@ -32,15 +34,31 @@ export const PhotosList = () => {
         style={(status === 'failed') ? {display: "flex"} : {display: "none"}}>
         Error: {error}
       </div>
+      <div
+        className="no-loggedin"
+        style={!isLoggedIn && photos.length === 0 ? {display: "block"} : {display: "none"}}>
+        <p className="no-loggedin-text">You need to Log in</p>
+      </div>
       <div 
         className="container"
-        style={(status === 'failed') ? {display: "none"} : {display: "block"}}>
+        style={(status !== 'failed' && (isLoggedIn || photos.length > 0)) ? {display: "block"} : {display: "none"}}>
         <InfiniteScroll
           dataLength={photos.length}  
           next={() => dispatch(fetchPhotos(page))}
-          hasMore={true}
+          hasMore={isLoggedIn}
           scrollThreshold='80%'
           loader={<div className="lds-ripple"><div></div><div></div></div>}
+          endMessage={
+            <p 
+              className="no-loggedin-text" 
+              style={{"paddingTop": 0, "paddingBottom": "50px"}}>
+                Please <button 
+                          className="modal-button" 
+                          onClick={() => dispatch(logIn())}
+                        >
+                          Log in
+                        </button> to show more</p>
+                      }
         >
           <Masonry
             breakpointCols={breakpointColumnsObj}
