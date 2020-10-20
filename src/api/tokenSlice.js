@@ -3,6 +3,7 @@ import Cookies from 'js-cookie'
 import { unsplash } from './unsplashApi'
 import { authenticationUrl } from './unsplashApi'
 import { isLoggedIn, currentPage } from '../app/sessionStorage'
+import { SITE_URL } from '../api/keys'
 import fetch from 'node-fetch'
 global.fetch = fetch;
 
@@ -25,10 +26,11 @@ export const tokenSlice = createSlice({
     logOut(state, action) {
       Cookies.remove('token')
       unsplash.auth.setBearerToken(null)
+      state.isLoggedIn = false
       window.location.reload()
     },
     logIn(state, action) {
-      state.currentPage = window.location.href.split('ru')[1]
+      state.currentPage = window.location.href.split(SITE_URL)[1]
       window.location.assign(authenticationUrl)
     }
   },

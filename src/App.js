@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import { PhotosList } from './features/photos/PhotosList'
 import { SinglePhotoPage } from './features/photos/SinglePhotoPage'
 import { Auth } from './api/Auth.js'
+import { SITE_URL } from './api/keys'
 import store from './app/store'
 
 import './features/photos/styles/font-faces.css'
@@ -36,4 +37,13 @@ function App() {
 store.subscribe(() => {
   sessionStorage.setItem('store', JSON.stringify(store.getState()))
 })
+
+window.addEventListener('unload', function() {
+  let isMainPage = window.location.href.split(SITE_URL)[1] === '/' ? true : false
+
+  if (isMainPage && store.getState().token.isLoggedIn) {
+      sessionStorage.clear()
+  }
+})
+
 export default App
