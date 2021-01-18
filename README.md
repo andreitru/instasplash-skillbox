@@ -1,6 +1,6 @@
 # Instasplash
 
-## Image viewer client for [Unsplash](https://unsplash.com/?utm_source=phoiewer&utm_medium=referral)
+## Image viewer client for [Unsplash](https://unsplash.com/)
 
 ### Use the App
 
